@@ -1,25 +1,14 @@
-<agm-map [latitude]="lat" [longitude]="lng" (mapClick)="addMarker($event)" (mapReady)="onMapReady($event)" >
+<agm-map [latitude]="lat" [longitude]="lng" (mapReady)="onMapReady($event)" >
     <agm-direction 
       [origin]="origin" 
       [destination]="destination"
       [waypoints]="waypoints"
-      [travelMode]="travelMode"
-      [transitOptions]="transitOptions" 
       [avoidHighways]="avoidHighways"
       [provideRouteAlternatives]="provideRouteAlternatives"
       [renderOptions]="renderOptions" 
       [markerOptions]="markerOptions"
     >
-    </agm-direction>
-    <agm-marker
-        *ngFor="let marker of markers"
-        [latitude]="marker.lat"
-        [longitude]="marker.lng"
-        [opacity]="marker.alpha"
-        [markerDraggable]="true"
-        (markerClick)="selectMarker($event)"
-      >
-      </agm-marker>
+    </agm-direction> 
   </agm-map>
 
 <h4>Duration: {{durationText}}</h4>

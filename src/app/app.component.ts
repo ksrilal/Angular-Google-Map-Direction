@@ -13,12 +13,10 @@ export class AppComponent {
   durationText: any;
   tempLocationList = [];
   public waypoints = [];
-  markers = [];
   lat = 6.9271;
   lng = 79.8612; 
-  selectedMarker: any; 
   public avoidHighways: boolean = true // default: false
-  public provideRouteAlternatives: boolean = true // default: false
+  public provideRouteAlternatives: boolean = false // default: false
 
   public renderOptions = {
     suppressMarkers: true,
@@ -96,8 +94,8 @@ export class AppComponent {
 
       }
     
-      for(let i= 0; i< this.tempLocationList.length; i++){
-        if(i==this.tempLocationList.length-1 && i==0) continue; //remove origin & destination
+      for(let i = 0; i < this.tempLocationList.length; i++){
+        if(i==this.tempLocationList.length-1 || i==0) continue; //remove origin & destination
         else{
           this.waypoints.push({
             location: this.tempLocationList[i],
@@ -110,9 +108,7 @@ export class AppComponent {
 
   onMapReady(mapInstance) {
     let trafficLayer = new google.maps.TrafficLayer();
-    let bicyclingLayer = new google.maps.BicyclingLayer();
-    trafficLayer.setMap(mapInstance);
-    bicyclingLayer.setMap(mapInstance);
+    //trafficLayer.setMap(mapInstance);
   }
 
 }   
