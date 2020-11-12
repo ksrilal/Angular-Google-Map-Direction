@@ -10,13 +10,12 @@ export class AppComponent {
   destination: any;
   minDestinationIndex: any;
   duration: any;
-
+  tempLocationList = [];
+  public waypoints = [];
+  markers = [];
   lat = 6.9271;
   lng = 79.8612; 
-
   selectedMarker: any; 
-  //travelMode = google.maps.TravelMode.BICYCLING;
-  //public transitOptions: string = 'TRANSIT';
   public avoidHighways: boolean = true // default: false
   public provideRouteAlternatives: boolean = true // default: false
 
@@ -26,42 +25,35 @@ export class AppComponent {
 
   public markerOptions = {
     origin: {
-      //infoWindow: 'This is origin.',
       icon: '../assets/map_icon/map3.png',
       draggable: false,
     },
     waypoints: {
       icon: '../assets/map_icon/map1.png',
-      //label: 'marker label',
       opacity: 0.8,
     },
     destination: {
         icon: '../assets/map_icon/map1.png',
-        //label: 'marker label',
         opacity: 0.8,
     },
   }
-
-  markers = [];
 
   dbLocationsList = [    
     // { lat: 6.9044, lng: 79.8540 }, //bambalapitiya
     {lat: 6.897558259656697, lng: 79.86007655452623}, //thunmulla
     //{ lat: 6.9117, lng: 79.8646 }, //Cinnamon Gardens
-    //{ lat: 6.8976, lng: 79.8815 }, //narahenpita
-    {lat: 6.881978742791475, lng: 79.85887818038464}, //scienter
+    { lat: 6.8976, lng: 79.8815 }, //narahenpita
+    //{lat: 6.881978742791475, lng: 79.85887818038464}, //scienter
     { lat: 6.8741, lng: 79.8605 }, //Wellawatte 
     //{ lat: 6.9094, lng: 79.8943 }, //Rajagiriya
   ]; 
 
-  tempLocationList = [];
-
-  public waypoints = []
 
   ngOnInit() {
     this.getDirection();
+
     var service = new google.maps.DirectionsService();
-     service.route({
+    service.route({
       origin: { lat: 6.908716852475053, lng: 79.87734690661742},
       destination: this.tempLocationList[this.tempLocationList.length-1],
       travelMode: google.maps.TravelMode.DRIVING ,
@@ -74,17 +66,19 @@ export class AppComponent {
          console.log("your error")
       }
     });
+    
   }
 
   getDirection() {
     this.calculateDistance();
-    this.origin = { lat: 6.908716852475053, lng: 79.87734690661742}; //borella
+    this.origin = { lat: 6.908716852475053, lng: 79.87734690661742}; //borella (origin)
     this.destination = this.tempLocationList[this.tempLocationList.length-1];
   }
-  
+   
   calculateDistance() {
-    this.tempLocationList.push({ lat: 6.908716852475053, lng: 79.87734690661742});
+    this.tempLocationList.push({ lat: 6.908716852475053, lng: 79.87734690661742}); //borella (origin)
     const distanceList: number[] = [];
+
     while(true){
       this.dbLocationsList.forEach(element => {
         const from = new google.maps.LatLng(this.tempLocationList[this.tempLocationList.length-1]);
@@ -98,9 +92,9 @@ export class AppComponent {
       distanceList.splice(0,distanceList.length)
       if(this.dbLocationsList.length == 0)  break;
     }
-
+ 
     for(let i= 0; i< this.tempLocationList.length; i++){
-      if(i==this.tempLocationList.length-1 && i==0) continue;
+      if(i==this.tempLocationList.length-1 && i==0) continue; //remove origin & destination
       else{
         this.waypoints.push({
           location: this.tempLocationList[i],
@@ -108,7 +102,8 @@ export class AppComponent {
         })
       }
     }
-  } 
+
+  }  
 
   onMapReady(mapInstance) {
     let trafficLayer = new google.maps.TrafficLayer();
