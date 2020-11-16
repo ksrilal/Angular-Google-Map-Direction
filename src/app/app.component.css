@@ -1,4 +1,8 @@
 agm-map {
-    height: 600px;
+    height: 700px;
     /* width: 1000px; */
-  }  
+  }
+    
+::ng-deep .gm-style .gm-style-iw-c button {
+    display: none !important;
+}

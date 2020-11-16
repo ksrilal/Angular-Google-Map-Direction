@@ -8,8 +8,12 @@
       [renderOptions]="renderOptions" 
       [markerOptions]="markerOptions"
     >
-    </agm-direction> 
+    </agm-direction>
+    <agm-marker *ngIf="isDuration" [latitude]="6.9089267" [longitude]="79.87754780" [visible]="false">
+      <agm-info-window [disableAutoPan]="true" [isOpen]="true">
+        <strong>{{durationText}} mins</strong>
+      </agm-info-window>
+    </agm-marker>
   </agm-map>
 
-<h4>Duration: {{durationText}}</h4>
 

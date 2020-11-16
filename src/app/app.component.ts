@@ -11,6 +11,7 @@ export class AppComponent {
   minDestinationIndex: any;
   duration: number = 0;
   durationText: any;
+  isDuration = false;
   tempLocationList = [];
   public waypoints = [];
   lat = 6.9271;
@@ -29,6 +30,7 @@ export class AppComponent {
     },
     waypoints: {
       icon: '../assets/map_icon/map1.png',
+      // label: 'durationText',
       opacity: 0.8,
     },
     destination: {
@@ -38,13 +40,13 @@ export class AppComponent {
   }
 
   dbLocationsList = [    
-    // { lat: 6.9044, lng: 79.8540 }, //bambalapitiya
+    { lat: 6.9044, lng: 79.8540 }, //bambalapitiya
     // {lat: 6.897558259656697, lng: 79.86007655452623}, //thunmulla
-    // { lat: 6.9117, lng: 79.8646 }, //Cinnamon Gardens
-    { lat: 6.8976, lng: 79.8815 }, //narahenpita
-    // {lat: 6.881978742791475, lng: 79.85887818038464}, //scienter
-    // { lat: 6.8741, lng: 79.8605 }, //Wellawatte 
-    { lat: 6.9094, lng: 79.8943 }, //Rajagiriya
+    { lat: 6.9117, lng: 79.8646 }, //Cinnamon Gardens
+    // { lat: 6.8976, lng: 79.8815 }, //narahenpita
+    {lat: 6.881978742791475, lng: 79.85887818038464}, //scienter
+    { lat: 6.8741, lng: 79.8605 }, //Wellawatte 
+    // { lat: 6.9094, lng: 79.8943 }, //Rajagiriya
   ]; 
 
 
@@ -86,7 +88,20 @@ export class AppComponent {
         }, (data, status) => {
           if (status === 'OK') {
             this.duration += data.routes[0].legs[0].duration.value;
-            this.durationText = new Date(this.duration * 1000).toISOString().substr(11, 8) 
+            var toHHMMSS = (secs) => {
+              var sec_num = parseInt(secs, 10)
+              var hours   = Math.floor(sec_num / 3600)
+              var minutes = Math.floor(sec_num / 60) % 60
+              var seconds = sec_num % 60
+          
+              return [hours,minutes,seconds]
+                  .map(v => v < 10 ? "0" + v : v)
+                  .filter((v,i) => v !== "00" || i > 0)
+                  .join(":")
+            }
+            this.durationText = toHHMMSS(this.duration);
+            //this.durationText = new Date(this.duration * 1000).toISOString().substr(11, 8);
+            this.isDuration = true;
           } else {
              console.log("your error")
           }
@@ -100,10 +115,10 @@ export class AppComponent {
           this.waypoints.push({
             location: this.tempLocationList[i],
             stopover: false,
-          })
+          });
         }
       }
-    
+ 
   }  
 
   onMapReady(mapInstance) {
@@ -111,4 +126,6 @@ export class AppComponent {
     //trafficLayer.setMap(mapInstance);
   }
 
-}   
+}
+
+  
